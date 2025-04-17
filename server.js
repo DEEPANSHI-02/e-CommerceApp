@@ -3,38 +3,44 @@ const express = require('express');
 // const morgan = require('morgan');
 const connectDB = require('./config/db');
 const dotenv = require("dotenv");
-// const session = require("express-session");
-// const password = require("passport");
+const session = require("express-session");
+const passport = require("passport");
 const createSampleData = require('./utils/seeder');
+const authRoutes = require('./routes/authRoutes');
+
+require('./config/passport');
 
 dotenv.config();
 connectDB();
 
 const app = express();
 
+app.use('/auth', authRoutes);
 
-
-// app.use(session({
-//     secret: process.env.SESSION_SECRET,
-//     resave: false,
-//     saveUninitialized: true
-// }));
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+}));
   
 
-
 app.use(express.json());
-// app.use(express.urlencoded({ extended: false }));
-// app.use(cors());
-// app.use(morgan('dev'));
 
-// app.use('/api/auth', require('./routes/authRoutes'));
-// app.use('/api/products', require('./routes/productRoutes'));
-// app.use('/api/orders', require('./routes/orderRoutes'));
-// app.use('/api/admin', require('./routes/adminRoutes'));
-// app.use('/api/rider', require('./routes/riderRoutes'));
+app.use(passport.initialize());
+app.use(passport.session());
 
-// const authRoutes = require('./routes/authRoutes');
-// app.use('/auth', authRoutes);
+const productRoutes = require('./routes/productRoutes');
+const orderRoutes = require('./routes/orderRoutes');
+const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
+const riderRoutes = require('./routes/riderRoutes');
+
+app.use('/api/products', productRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/rider', riderRoutes);
+
 
 
 connectDB().then(() => {
