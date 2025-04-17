@@ -5,11 +5,14 @@ const connectDB = require('./config/db');
 const dotenv = require("dotenv");
 // const session = require("express-session");
 // const password = require("passport");
+const createSampleData = require('./utils/seeder');
 
 dotenv.config();
 connectDB();
 
 const app = express();
+
+
 
 // app.use(session({
 //     secret: process.env.SESSION_SECRET,
@@ -33,6 +36,10 @@ app.use(express.json());
 // const authRoutes = require('./routes/authRoutes');
 // app.use('/auth', authRoutes);
 
+
+connectDB().then(() => {
+  createSampleData(); 
+});
 
 app.get('/', (req, res) => {
   res.send('API is running...');
