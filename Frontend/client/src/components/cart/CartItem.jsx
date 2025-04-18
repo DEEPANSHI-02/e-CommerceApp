@@ -1,34 +1,39 @@
 import React from 'react';
-import { useCart } from '../../context/CartContext';
 
-const CartItem = ({ item }) => {
-  const { removeFromCart } = useCart();
+const CartItem = ({ item, updateQuantity, removeFromCart }) => {
+  const quantity = item.quantity || 1;
 
   return (
-    <div className="flex items-center justify-between border-b py-4">
-      <div className="flex items-center gap-4">
-        <img
-          src={item.imageUrl}
-          alt={item.name}
-          className="w-24 h-24 object-cover rounded"
-        />
-        <div>
-          <h2 className="font-semibold">{item.name}</h2>
-          <p className="text-sm text-gray-500">
-            Size: {item.selectedSize} | Color: {item.selectedColor}
-          </p>
-          <p className="text-sm">Qty: {item.quantity}</p>
-          <p className="text-blue-600 font-semibold mt-1">
-            ₹{item.price * item.quantity}
-          </p>
+    <div className="flex flex-col md:flex-row justify-between items-center border-b pb-4">
+      <div className="text-left">
+        <h3 className="text-lg font-semibold">{item.name}</h3>
+        <p className="text-sm text-gray-600">
+          Size: {item.size || 'N/A'} | Color: {item.color || 'N/A'}
+        </p>
+        <div className="flex items-center mt-2">
+          <label className="mr-2 text-sm">Qty:</label>
+          <input
+            type="number"
+            min={1}
+            value={quantity}
+            onChange={(e) =>
+              updateQuantity(item._id, parseInt(e.target.value))
+            }
+            className="w-16 border rounded px-2 py-1"
+          />
         </div>
       </div>
-      <button
-        onClick={() => removeFromCart(item)}
-        className="text-red-500 hover:underline"
-      >
-        Remove
-      </button>
+      <div className="text-right mt-4 md:mt-0">
+        <p className="text-blue-600 font-semibold">
+          ₹{(item.price * quantity).toFixed(2)}
+        </p>
+        <button
+          onClick={() => removeFromCart(item._id)}
+          className="text-red-500 text-sm mt-2"
+        >
+          Remove
+        </button>
+      </div>
     </div>
   );
 };

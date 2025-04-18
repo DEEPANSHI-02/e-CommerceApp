@@ -1,95 +1,78 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { getProductById } from '../services/product.service';
-import { useCart } from '../context/CartContext';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import api from "../api/main";
+import { useCart } from "../context/CartContext";
 
 const ProductDetails = () => {
   const { id } = useParams();
   const { addToCart } = useCart();
-
   const [product, setProduct] = useState(null);
-  const [selectedSize, setSelectedSize] = useState('');
-  const [selectedColor, setSelectedColor] = useState('');
+  const [selectedVariant, setSelectedVariant] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const data = await getProductById(id);
-        setProduct(data);
+        const res = await api.get(`/products/${id}`);
+        setProduct(res.data);
+        if (res.data.variants && res.data.variants.length > 0) {
+          setSelectedVariant(res.data.variants[0]); // select default variant
+        }
       } catch (err) {
-        console.error('Error loading product:', err);
+        console.error("Error fetching product:", err);
       } finally {
         setLoading(false);
       }
     };
+
     fetchProduct();
   }, [id]);
 
   const handleAddToCart = () => {
-    if (!selectedSize || !selectedColor) {
-      alert('Please select size and color');
+    if (!selectedVariant || selectedVariant.stock === 0) {
+      alert("Please select a variant that is in stock.");
       return;
     }
 
     const cartItem = {
       ...product,
-      selectedSize,
-      selectedColor,
-      quantity: 1,
+      selectedVariant,
     };
 
     addToCart(cartItem);
-    alert('Product added to cart!');
+    alert("Added to cart!");
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (!product) return <div>Product not found.</div>;
+  if (loading) return <div className="text-center py-10">Loading product...</div>;
+  if (!product) return <div className="text-center py-10 text-red-600">Product not found</div>;
 
   return (
-    <div className="max-w-4xl mx-auto p-4 grid md:grid-cols-2 gap-8">
-      <img src={product.imageUrl} alt={product.name} className="w-full rounded-lg object-cover" />
+    <div className="max-w-3xl mx-auto p-6 bg-white shadow rounded">
+      <h1 className="text-2xl font-bold text-blue-800 mb-4">{product.name}</h1>
+      <p className="text-gray-700 text-lg mb-2">Price: ₹{product.price}</p>
+      <p className="text-sm text-gray-500 mb-4 capitalize">Category: {product.category}</p>
 
-      <div>
-        <h1 className="text-2xl font-bold mb-2">{product.name}</h1>
-        <p className="text-gray-700 mb-4">{product.description}</p>
-        <p className="text-xl font-semibold text-blue-600 mb-4">₹{product.price}</p>
-
-        <div className="mb-4">
-          <label className="block mb-1">Select Size</label>
-          <select
-            value={selectedSize}
-            onChange={(e) => setSelectedSize(e.target.value)}
-            className="w-full border rounded p-2"
-          >
-            <option value="">-- Select --</option>
-            {product.variants.size.map((size) => (
-              <option key={size} value={size}>{size}</option>
-            ))}
-          </select>
-        </div>
-
-        <div className="mb-4">
-          <label className="block mb-1">Select Color</label>
-          <select
-            value={selectedColor}
-            onChange={(e) => setSelectedColor(e.target.value)}
-            className="w-full border rounded p-2"
-          >
-            <option value="">-- Select --</option>
-            {product.variants.color.map((color) => (
-              <option key={color} value={color}>{color}</option>
-            ))}
-          </select>
-        </div>
-
-        <button
-          onClick={handleAddToCart}
-          className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
+      <div className="mb-4">
+        <label className="block font-medium mb-1">Select Variant:</label>
+        <select
+          className="w-full p-2 border rounded"
+          value={JSON.stringify(selectedVariant)}
+          onChange={(e) => setSelectedVariant(JSON.parse(e.target.value))}
         >
-          Add to Cart
-        </button>
+          {product.variants.map((variant, index) => (
+            <option key={index} value={JSON.stringify(variant)}>
+              {variant.size} / {variant.color} — {variant.stock} in stock
+            </option>
+          ))}
+        </select>
       </div>
+
+      <button
+        onClick={handleAddToCart}
+        className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition"
+      >
+        Add to Cart
+      </button>
     </div>
   );
 };

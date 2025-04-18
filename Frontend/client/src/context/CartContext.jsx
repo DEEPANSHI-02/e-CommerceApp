@@ -14,36 +14,64 @@ export const CartProvider = ({ children }) => {
     );
 
     if (exists) {
-      // if same variant, increase quantity
       setCartItems((prev) =>
         prev.map((i) =>
-          i === exists ? { ...i, quantity: i.quantity + 1 } : i
+          i._id === exists._id &&
+          i.selectedColor === exists.selectedColor &&
+          i.selectedSize === exists.selectedSize
+            ? { ...i, quantity: i.quantity + 1 }
+            : i
         )
       );
     } else {
-      setCartItems((prev) => [...prev, item]);
+      setCartItems((prev) => [...prev, { ...item, quantity: 1 }]);
     }
   };
 
-  const removeFromCart = (itemToRemove) => {
+  const updateQuantity = (productId, quantity, selectedColor, selectedSize) => {
     setCartItems((prev) =>
-      prev.filter((item) => item !== itemToRemove)
+      prev.map((item) =>
+        item._id === productId &&
+        item.selectedColor === selectedColor &&
+        item.selectedSize === selectedSize
+          ? { ...item, quantity: Math.max(1, quantity) }
+          : item
+      )
+    );
+  };
+
+  const removeFromCart = (productId, selectedColor, selectedSize) => {
+    setCartItems((prev) =>
+      prev.filter(
+        (item) =>
+          !(
+            item._id === productId &&
+            item.selectedColor === selectedColor &&
+            item.selectedSize === selectedSize
+          )
+      )
     );
   };
 
   const getCartTotal = () => {
     return cartItems.reduce(
-      (total, item) => total + item.price * item.quantity,
+      (total, item) => total + item.price * (item.quantity || 1),
       0
     );
-    };
-    
-    const clearCart = () => setCartItems([]);
+  };
 
+  const clearCart = () => setCartItems([]);
 
   return (
     <CartContext.Provider
-      value={{ cartItems, addToCart, removeFromCart, getCartTotal, clearCart}}
+      value={{
+        cartItems,
+        addToCart,
+        updateQuantity,
+        removeFromCart,
+        getCartTotal,
+        clearCart,
+      }}
     >
       {children}
     </CartContext.Provider>
