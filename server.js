@@ -1,12 +1,12 @@
 const express = require('express');
-// const cors = require('cors');
-// const morgan = require('morgan');
+const cors = require('cors');
+const morgan = require('morgan');
 const connectDB = require('./config/db');
 const dotenv = require("dotenv");
 const session = require("express-session");
 const passport = require("passport");
 const createSampleData = require('./utils/seeder');
-const authRoutes = require('./routes/authRoutes');
+
 
 require('./config/passport');
 
@@ -15,7 +15,6 @@ connectDB();
 
 const app = express();
 
-app.use('/auth', authRoutes);
 
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -41,7 +40,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/rider', riderRoutes);
 
-
+app.use('/auth', authRoutes);
 
 connectDB().then(() => {
   createSampleData(); 

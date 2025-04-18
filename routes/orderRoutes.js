@@ -1,10 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const { createOrder, getAllOrders, updateOrderStatus } = require('../controllers/orderController');
-const { protect, isAdmin } = require('../middleware/authMiddleware');
+const { isAdmin } = require('../middleware/auth');
+const { protect , requireRole } = require('../middleware/protectedRoutes');
+
+console.log('protect:', typeof protect);
+console.log('requireRole:', typeof requireRole);
+console.log('requireRole("admin"):', typeof requireRole("admin"));
+
 
 router.post('/', protect, createOrder);                          
-router.get('/', protect, isAdmin, getAllOrders);              
-router.patch('/:id/status', protect, isAdmin, updateOrderStatus); 
+router.get('/', protect, requireRole('admin'), getAllOrders);              
+router.patch('/:id/status', protect, requireRole('admin'), updateOrderStatus); 
 
 module.exports = router;
