@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import api from '../api/main'; 
+import { getUserOrders } from '../services/order.service'; // use your correct service path
 import Loading from '../components/common/Loading';
 import { Link } from 'react-router-dom';
 
@@ -7,18 +7,18 @@ const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchOrders = async () => {
-    try {
-      const res = await api.get('/orders/mine'); // Adjust endpoint if different
-      setOrders(res.data);
-    } catch (err) {
-      console.error('Failed to fetch orders', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const data = await getUserOrders(); // ✅ use correct service
+        setOrders(data);
+      } catch (err) {
+        console.error('Failed to fetch orders', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchOrders();
   }, []);
 
@@ -34,9 +34,16 @@ const Orders = () => {
           {orders.map((order) => (
             <div key={order._id} className="border p-4 rounded shadow">
               <div><strong>Order ID:</strong> {order._id}</div>
-              <div><strong>Total:</strong> ₹{order.total}</div>
+              <div><strong>Total:</strong> ₹{order.totalPrice}</div>
               <div><strong>Status:</strong> {order.status}</div>
               <div><strong>Date:</strong> {new Date(order.createdAt).toLocaleString()}</div>
+
+              <Link
+                to={`/orders/${order._id}`}
+                className="text-blue-600 hover:underline text-sm mt-2 inline-block"
+              >
+                View Details
+              </Link>
             </div>
           ))}
         </div>
@@ -44,13 +51,5 @@ const Orders = () => {
     </div>
   );
 };
-
-<Link
-  to={`/orders/${Orders._id}`}
-  className="text-blue-600 hover:underline text-sm"
->
-  View Details
-</Link>
-
 
 export default Orders;

@@ -6,6 +6,7 @@ import { createOrder } from '../../services/order.service';
 const CheckoutForm = () => {
   const { cartItems, getCartTotal, clearCart } = useCart();
   const navigate = useNavigate();
+  const [submitting, setSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -20,12 +21,19 @@ const CheckoutForm = () => {
     }));
   };
 
+  const isValidPhone = (phone) => {
+    return /^[0-9]{10}$/.test(phone); // simple 10-digit validation
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!formData.name || !formData.address || !formData.phone) {
-      alert('Please fill all fields');
-      return;
+      return alert('Please fill all fields');
+    }
+
+    if (!isValidPhone(formData.phone)) {
+      return alert('Enter a valid 10-digit phone number');
     }
 
     const orderData = {
@@ -35,15 +43,18 @@ const CheckoutForm = () => {
     };
 
     try {
-        await createOrder(orderData);
-        clearCart();
+      setSubmitting(true);
+      await createOrder(orderData);
+      clearCart();
       navigate('/order-confirmation');
     } catch (err) {
       console.error('Order failed:', err);
-      alert('Something went wrong!');
+      alert(err?.response?.data?.message || 'Something went wrong!');
+    } finally {
+      setSubmitting(false);
     }
-    };
-     
+  };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4 border p-4 rounded shadow">
       <h2 className="text-lg font-semibold">Shipping Details</h2>
@@ -77,9 +88,10 @@ const CheckoutForm = () => {
 
       <button
         type="submit"
-        className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
+        disabled={submitting}
+        className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition disabled:opacity-50"
       >
-        Place Order
+        {submitting ? 'Placing Order...' : 'Place Order'}
       </button>
     </form>
   );

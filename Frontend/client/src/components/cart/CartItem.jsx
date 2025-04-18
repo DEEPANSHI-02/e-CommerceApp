@@ -8,7 +8,7 @@ const CartItem = ({ item, updateQuantity, removeFromCart }) => {
       <div className="text-left">
         <h3 className="text-lg font-semibold">{item.name}</h3>
         <p className="text-sm text-gray-600">
-          Size: {item.size || 'N/A'} | Color: {item.color || 'N/A'}
+          Size: {item.selectedSize || 'N/A'} | Color: {item.selectedColor || 'N/A'}
         </p>
         <div className="flex items-center mt-2">
           <label className="mr-2 text-sm">Qty:</label>
@@ -17,7 +17,12 @@ const CartItem = ({ item, updateQuantity, removeFromCart }) => {
             min={1}
             value={quantity}
             onChange={(e) =>
-              updateQuantity(item._id, parseInt(e.target.value))
+              updateQuantity(
+                item._id,
+                parseInt(e.target.value),
+                item.selectedColor,
+                item.selectedSize
+              )
             }
             className="w-16 border rounded px-2 py-1"
           />
@@ -28,7 +33,9 @@ const CartItem = ({ item, updateQuantity, removeFromCart }) => {
           ₹{(item.price * quantity).toFixed(2)}
         </p>
         <button
-          onClick={() => removeFromCart(item._id)}
+          onClick={() =>
+            removeFromCart(item._id, item.selectedColor, item.selectedSize)
+          }
           className="text-red-500 text-sm mt-2"
         >
           Remove

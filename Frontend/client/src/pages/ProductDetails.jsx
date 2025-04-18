@@ -35,8 +35,11 @@ const ProductDetails = () => {
     }
 
     const cartItem = {
-      ...product,
-      selectedVariant,
+      _id: product._id,
+      name: product.name,
+      price: product.price,
+      selectedColor: selectedVariant.color,
+      selectedSize: selectedVariant.size,
     };
 
     addToCart(cartItem);
