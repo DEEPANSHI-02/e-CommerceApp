@@ -2,7 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const router = express.Router();
 
-const { requireRole } = require('../middleware/protectedRoutes');
+const { requireRole } = require('../middleware/auth');
 
 const { googleLogin } = require('../controllers/authController');
 
@@ -15,7 +15,7 @@ router.get('/google',
 router.get('/google/callback',
   passport.authenticate('google', {
     failureRedirect: '/login',
-    successRedirect: '/dashboard', // or wherever you want
+    successRedirect: '/dashboard', 
   })
 );
 

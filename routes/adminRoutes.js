@@ -3,10 +3,12 @@ const router = express.Router();
 const User = require('../models/User');
 const Order = require('../models/Order');
 const ApprovedEmail = require('../models/ApprovedEmail');
-const { adminAuth } = require('../middleware/auth');
+const { protect, requireRole } = require('../middleware/auth');
+
 
 // Get all riders
-router.get('/riders', adminAuth, async (req, res) => {
+router.get('/riders', [protect, requireRole('admin')]
+, async (req, res) => {
   try {
     const riders = await User.find({ role: 'rider' }).select('-password');
     res.json(riders);

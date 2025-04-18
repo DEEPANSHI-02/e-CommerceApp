@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { createOrder, getAllOrders, updateOrderStatus } = require('../controllers/orderController');
 const { isAdmin } = require('../middleware/auth');
-const { protect , requireRole } = require('../middleware/protectedRoutes');
+const { protect , requireRole } = require('../middleware/auth');
 
 console.log('protect:', typeof protect);
 console.log('requireRole:', typeof requireRole);

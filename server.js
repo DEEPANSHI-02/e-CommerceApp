@@ -7,7 +7,7 @@ const session = require("express-session");
 const passport = require("passport");
 const createSampleData = require('./utils/seeder');
 
-
+require('./middleware/auth');
 require('./config/passport');
 
 dotenv.config();
@@ -22,11 +22,9 @@ app.use(session({
     saveUninitialized: false,
 }));
   
-
-app.use(express.json());
-
 app.use(passport.initialize());
 app.use(passport.session());
+
 
 const productRoutes = require('./routes/productRoutes');
 const orderRoutes = require('./routes/orderRoutes');
@@ -41,6 +39,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/rider', riderRoutes);
 
 app.use('/auth', authRoutes);
+app.use(express.json());
 
 connectDB().then(() => {
   createSampleData(); 
