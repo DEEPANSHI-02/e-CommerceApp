@@ -29,13 +29,11 @@ A full-stack eCommerce platform with user authentication, product listings, cart
 
 | Client |
 |--------|-------|-------|
-| ![Client Screenshot](.fontend/client/screenshots/)
+| ![Client Screenshot] (Frontend\client\screenshots)
 
 ## 📦 Setup Instructions
 
-### 1. Clone the repository
-
-```bash
+1. Clone the repository
 git clone https://github.com/DEEPANSHI-02/e-CommerceApp.git
 cd e-CommerceApp
 
