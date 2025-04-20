@@ -81,7 +81,7 @@ const createSampleData = async () => {
     // Create one User
     const user = await new User({
       name: "Deepanshi",
-      email: "deepanshik825@gmail.com",
+      email: "deepanshi.p24@medhaviskillsuniversity.edu.in",
       googleId: "google-uid-123",
       role: "customer",
       address: "123 Sample Road",

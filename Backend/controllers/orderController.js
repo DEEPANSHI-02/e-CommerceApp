@@ -1,12 +1,13 @@
 const Order = require('../models/Order');
 
+// Create a new order
 const createOrder = async (req, res) => {
   try {
     const { customerInfo, items, total } = req.body;
 
     const order = await Order.create({
       customerId: req.user._id,
-      productId: items[0]._id, // assuming one item for now (or refactor for multiple)
+      productId: items[0]._id,
       totalPrice: total,
       shippingAddress: customerInfo.address,
       status: 'pending',
@@ -19,6 +20,7 @@ const createOrder = async (req, res) => {
   }
 };
 
+// Get orders for the currently logged-in customer
 const getUserOrders = async (req, res) => {
   try {
     const orders = await Order.find({ customerId: req.user._id })
@@ -32,6 +34,7 @@ const getUserOrders = async (req, res) => {
   }
 };
 
+// Admin: Get all orders
 const getAllOrders = async (req, res) => {
   try {
     const orders = await Order.find({})
@@ -44,6 +47,7 @@ const getAllOrders = async (req, res) => {
   }
 };
 
+// Admin: Update order status
 const updateOrderStatus = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
@@ -61,10 +65,28 @@ const updateOrderStatus = async (req, res) => {
   }
 };
 
+// Get order by ID
+const getOrderById = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id)
+      .populate('customerId', 'email')
+      .populate('productId', 'name price');
+
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    res.json(order);
+  } catch (err) {
+    console.error("Fetch order by ID error:", err);
+    res.status(500).json({ message: 'Error fetching order' });
+  }
+};
+
 module.exports = {
   createOrder,
   getAllOrders,
   updateOrderStatus,
-  getUserOrders, 
-  getOrderById,
+  getUserOrders,
+  getOrderById, 
 };
