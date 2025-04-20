@@ -8,7 +8,7 @@ const Footer = () => {
       <div className="container mx-auto px-4 py-10">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           <div>
-            <h3 className="text-lg font-bold">CoolBreeze</h3>
+            <h3 className="text-lg font-bold">TechlBreeze</h3>
             <p className="mt-4 text-sm text-gray-600">
               Providing high-quality cooling solutions for homes and offices since 2020.
             </p>
@@ -82,7 +82,7 @@ const Footer = () => {
         </div>
         <div className="mt-8 border-t border-gray-200 pt-8 text-center">
           <p className="text-sm text-gray-600">
-            © {currentYear} CoolBreeze. All rights reserved.
+            © {currentYear} TechBreeze. All rights reserved.
           </p>
         </div>
       </div>

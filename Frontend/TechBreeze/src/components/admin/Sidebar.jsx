@@ -21,7 +21,7 @@ const Sidebar = () => {
   return (
     <div className="hidden w-64 flex-shrink-0 bg-gray-800 md:block">
       <div className="flex h-16 items-center justify-center border-b border-gray-700">
-        <h1 className="text-xl font-bold text-white">CoolBreeze Admin</h1>
+        <h1 className="text-xl font-bold text-white">TechBreeze Admin</h1>
       </div>
       <nav className="mt-5 flex flex-col px-2">
         {navItems.map((item) => (

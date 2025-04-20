@@ -20,7 +20,7 @@ const DashboardPage = () => {
     const fetchDashboardData = async () => {
       try {
         // Normally, we'd call an API like this:
-        // const { data } = await riderApi.getOrders()
+        const { data } = await riderApi.getOrders()
         
         // For demo purposes, using mock data
         await new Promise(resolve => setTimeout(resolve, 1000))

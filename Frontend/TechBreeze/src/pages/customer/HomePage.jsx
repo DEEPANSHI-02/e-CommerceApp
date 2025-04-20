@@ -151,7 +151,7 @@ const HomePage = () => {
       {/* Benefits */}
       <section className="bg-gray-50 py-16">
         <div className="container mx-auto px-4">
-          <h2 className="mb-12 text-center text-3xl font-bold">Why Choose CoolBreeze?</h2>
+          <h2 className="mb-12 text-center text-3xl font-bold">Why Choose TechBreeze?</h2>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
             <div className="card flex flex-col items-center p-6 text-center">
               <div className="mb-4 rounded-full bg-primary-100 p-3">
@@ -204,7 +204,7 @@ const HomePage = () => {
                 ))}
               </div>
               <p className="mb-4 text-gray-700">
-                "The Smart AC I bought from CoolBreeze has been a game-changer. It's quiet, efficient, and the app control is seamless."
+                "The Smart AC I bought from TechBreeze has been a game-changer. It's quiet, efficient, and the app control is seamless."
               </p>
               <div className="flex items-center">
                 <div className="mr-4 h-10 w-10 overflow-hidden rounded-full bg-gray-200">

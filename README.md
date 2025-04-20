@@ -2,13 +2,27 @@
 
 A full-stack eCommerce platform with user authentication, product listings, cart system, order processing.
 
-## 🚀 Features
+🚀 Features
 
-- Google OAuth Authentication
-- Product listing with pricing, and details
-- Add to cart, remove, and update quantity
-- Checkout with order summary
-- Role-based access control (user, admin, rider)
+    Google OAuth Authentication
+
+    Role-Based Access Control
+
+        👤 Customer Panel: Browse products, add to cart, place orders, view order history
+
+        🛵 Rider Panel: View assigned orders, update delivery status
+
+        🛠️ Admin Panel: Manage orders, assign riders, view dashboard stats
+
+    Product Listing with category filters, price sorting, and detailed product pages
+
+    Cart System: Add to cart, update quantity, remove items
+
+    Order Placement & Confirmation with real-time data
+
+    Admin Dashboard: Displays revenue, order counts, and recent orders
+
+    Data fetched dynamically from backend MongoDB only for Customer
 
 ## 💻 Tech Stack
 
@@ -25,11 +39,6 @@ A full-stack eCommerce platform with user authentication, product listings, cart
 - Passport.js (Google OAuth)
 - JWT (session management)
 
-## 📸 Screenshots
-
-| Client |
-|--------|-------|-------|
-| ![Client Screenshot] (Frontend\client\screenshots)
 
 ## 📦 Setup Instructions
 
@@ -43,7 +52,7 @@ cd Backend
 npm install
 
 # Frontend
-cd ../Frontend/client
+cd ../Frontend/TechBreeze
 npm install
 
 3. Run the development servers
